@@ -1,0 +1,55 @@
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services") // ✅ Keep this active
+    id("dev.flutter.flutter-gradle-plugin") // Must come last
+}
+
+android {
+    namespace = "com.example.my_rate"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    defaultConfig {
+        applicationId = "com.example.my_rate"
+        
+        // --- START MOBILE SCANNER & FIREBASE CONFIGURATION ---
+        // 1. FIXED: Use 'minSdkVersion =' and '21' as an integer
+        minSdk = flutter.minSdkVersion 
+        
+        // Setting targetSdk using the Flutter version
+        targetSdk = flutter.targetSdkVersion
+        
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+        
+        // 2. FIXED: Use 'multiDexEnabled = true' assignment syntax
+        multiDexEnabled = true
+        // --- END MOBILE SCANNER & FIREBASE CONFIGURATION ---
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
+
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:34.4.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth") 
+}
